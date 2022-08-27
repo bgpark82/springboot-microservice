@@ -1,0 +1,27 @@
+version: '3'
+services:
+  eureka:
+    build: ./eureka
+    image: bgpark82/microservice-eureka
+    ports:
+      - "8761:8761"
+  user_1:
+    build: ./user
+    image: bgpark82/microservice-user
+    ports:
+      - "9001:9001"
+    depends_on:
+      - eureka
+    environment:
+      - server.port=9001
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka
+  user_2:
+    build: ./user
+    image: bgpark82/microservice-user
+    ports:
+      - "9002:9002"
+    depends_on:
+      - eureka
+    environment:
+      - server.port=9002
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka
